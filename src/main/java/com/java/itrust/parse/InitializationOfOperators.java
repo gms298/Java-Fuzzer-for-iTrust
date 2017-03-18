@@ -10,12 +10,13 @@ public class InitializationOfOperators {
 	  public static HashSet<BinaryExpr.Operator> relational = new HashSet<>();
 	  public static HashSet<BinaryExpr.Operator> arithmetic = new HashSet<>();
 	  public static HashSet<BinaryExpr.Operator> logical = new HashSet<>();
+	  public static HashSet<BinaryExpr.Operator> equals = new HashSet<>();
 	  
 	  public InitializationOfOperators(){
 		  initializeRelationalOperators();
 		  initializeArithmeticOperators();
 		  initializeLogicalOperators();
-		  
+		  initializeEqualOperators();
 	  }
 
 	private void initializeLogicalOperators() {
@@ -34,7 +35,14 @@ public class InitializationOfOperators {
 		arithmetic.add(BinaryExpr.Operator.divide);
 	}
 
+	private void initializeEqualOperators() {
+		// TODO Auto-generated method stub
+		
 
+		equals.add(BinaryExpr.Operator.equals);
+		equals.add(BinaryExpr.Operator.notEquals);
+		
+	}
 
 	private void initializeRelationalOperators() {
 		// TODO Auto-generated method stub
@@ -43,8 +51,7 @@ public class InitializationOfOperators {
 		relational.add(BinaryExpr.Operator.greater);
 		relational.add(BinaryExpr.Operator.lessEquals);
 		relational.add(BinaryExpr.Operator.greaterEquals);
-		relational.add(BinaryExpr.Operator.equals);
-		relational.add(BinaryExpr.Operator.notEquals);
+
 		
 	}
 }

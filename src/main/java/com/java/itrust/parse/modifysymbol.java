@@ -40,15 +40,19 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class modifysymbol extends ModifierVisitorAdapter<Void> {
- 
+    static int c = 1;
 
     
     public static void listall(File projectDir)
     {
         new DirExplorer((level, path, file) -> path.endsWith(".java"), (level, path, file) -> { 
         	int x = new Random().nextInt(100);
+        	
         	try {
-        		if(x >= 0)
+        		if (file.toString().equals("/home/vagrant/itrust/iTrust/src/main/edu/ncsu/csc/itrust/controller/labtechnician/LabTechnicianController.java")){
+        			return;
+        		}
+        		if(x %2 == 0)
         		{
         		System.out.println(file);
         		CompilationUnit compUnit = JavaParser.parse(file);
@@ -106,17 +110,15 @@ private static void writeFile(File file, String newJavaFile) {
 
 public static void main(String[] args) {
 	//Fill in the itrust directory to parse
-	System.out.println("start");
     File projectDir = new File("/home/vagrant/itrust/iTrust/src/main");
 	new InitializationOfOperators();
     listall(projectDir);
-    System.out.println("end");
     
    
 }
 	
     public static Node visitString(StringLiteralExpr declarator, Object args) {
-        String expression = declarator.getValue();
+/*        String expression = declarator.getValue();
         if(expression.equals("<"))
         	declarator.setValue(">");
         if(expression.equals(">"))
@@ -126,18 +128,16 @@ public static void main(String[] args) {
             	declarator.setValue(expression.toUpperCase());
             if(Character.isLetter(c) && Character.isUpperCase(c)) 
             	declarator.setValue(expression.toLowerCase());
-        }
+        }*/
         return declarator;
     }
     public static Node visitBinary(BinaryExpr declarator, Object args) {
-    	
+
         BinaryExpr.Operator expression = declarator.getOperator();
         HashSet<BinaryExpr.Operator> relational = InitializationOfOperators.relational;
         HashSet<BinaryExpr.Operator> logical = InitializationOfOperators.logical;
         HashSet<BinaryExpr.Operator> arithmetic = InitializationOfOperators.arithmetic;
-        
-        System.out.println("1");
-        System.out.println(declarator);
+        /*
         // randomizing the relational operations
         if (relational.contains(expression)){
         	// its a relational operator
@@ -159,42 +159,69 @@ public static void main(String[] args) {
         	BinaryExpr.Operator newExp = getRandomExpression(logical, expression);
         	declarator.setOperator(newExp);
         }
-             
+        */
+        
+    
+        if (c == 1){
+        	if(BinaryExpr.Operator.equals == expression)
+        		declarator.setOperator(BinaryExpr.Operator.notEquals);
+        	c++;
+        }
+        else if (c == 2){
+            if(BinaryExpr.Operator.lessEquals == expression)
+            	declarator.setOperator(BinaryExpr.Operator.greaterEquals);
+            c++;
+        }
+        else{
+            if(BinaryExpr.Operator.greaterEquals == expression)
+            	declarator.setOperator(BinaryExpr.Operator.lessEquals);
+            c = 1;
+        }
+
+ /*       if(BinaryExpr.Operator.and == expression)
+        	declarator.setOperator(BinaryExpr.Operator.or);
+        
+        
+       if(BinaryExpr.Operator.less == expression)
+        	declarator.setOperator(BinaryExpr.Operator.greater);
+        	
+        if(BinaryExpr.Operator.lessEquals == expression)
+        	declarator.setOperator(BinaryExpr.Operator.greaterEquals);
+        if(BinaryExpr.Operator.minus == expression)
+        	declarator.setOperator(BinaryExpr.Operator.plus);
+        if(BinaryExpr.Operator.notEquals == expression)
+        	declarator.setOperator(BinaryExpr.Operator.equals);
+        if(BinaryExpr.Operator.divide == expression)
+        	declarator.setOperator(BinaryExpr.Operator.remainder);
+        if(BinaryExpr.Operator.and == expression)
+        	declarator.setOperator(BinaryExpr.Operator.or);*/
+        
         return declarator;
         
     }
 
 	private static Operator getRandomExpression(HashSet<Operator> setOfExpressions, Operator expression) {
 		// TODO Auto-generated method stub
-		
+		Operator result = null;
 		int size = setOfExpressions.size();
-		System.out.println("2");
-		System.out.println(expression);
+		
+		
 		boolean flag = true;
-		
-		
 		while (flag){
-			// select between 0 (inclusive) and size (exclusive)
-			int randomNo = new Random().nextInt(size);
 			int c = 0;
-			System.out.println(randomNo);
+			int randomNo = new Random().nextInt(size);
+
 			for (Operator e : setOfExpressions){
-				
-				//if (c == randomNo && e != expression){
-				if (e == expression && c == randomNo){
-					System.out.println("inside e == expression");
-					break;
-				}
-				if (c == randomNo){
-					// return this expression 
-					flag = false;
-					System.out.println("3");
-					System.out.println(e);
-					return e;
-				}
 				c++;
+
+				if (c == randomNo && e != expression){
+					// return this expression 
+					result = e;
+					flag = false;
+					return result;
+				}
 			}
 		}
-		return null;
+		return result;
 	}
  }
